@@ -107,3 +107,15 @@ yesBtn.onclick=()=>{
 
 </body>
 </html>
+// replace your startBtn.onclick with this
+startBtn.addEventListener('click', async () => {
+  console.log('Start button clicked');
+  try {
+    await music.play();           // try to play and wait for the promise
+    console.log('music.play() succeeded');
+    startBtn.style.display = 'none';
+  } catch (err) {
+    console.error('music.play() failed:', err);
+    alert('Playback blocked or failed — see console for details');
+  }
+});
