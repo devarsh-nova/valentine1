@@ -37,6 +37,7 @@ button{
 
 #no{position:absolute;background:#6c757d;color:white;}
 #yes{background:#ffccd5;}
+#start{background:#00f5d4;color:black;}
 
 .counter{margin-top:15px;font-size:14px;}
 
@@ -59,63 +60,49 @@ button{
 
 <div class="card">
 <h1>Will you be my Valentine? 💘</h1>
+<button id="start">▶ Start Music</button><br>
 <button id="yes">Yes 😍</button>
 <button id="no">No 😒</button>
 <div class="counter" id="counter"></div>
 </div>
 
 <script>
-const noBtn = document.getElementById("no");
-const yesBtn = document.getElementById("yes");
-const counter = document.getElementById("counter");
-const music = document.getElementById("music");
+const noBtn=document.getElementById("no");
+const yesBtn=document.getElementById("yes");
+const startBtn=document.getElementById("start");
+const counter=document.getElementById("counter");
+const music=document.getElementById("music");
 
-let started = false;
-let yesCount = localStorage.getItem("yesCount") || 0;
-let noCount = localStorage.getItem("noCount") || 0;
+let yesCount=localStorage.getItem("yesCount")||0;
+let noCount=localStorage.getItem("noCount")||0;
 
-counter.innerText = `Anonymous votes — Yes ❤️: ${yesCount} | No 💔: ${noCount}`;
+counter.innerText=`Anonymous votes — Yes ❤️: ${yesCount} | No 💔: ${noCount}`;
 
-function playMusic(){
-  if(!started){
-    music.play().catch(()=>{});
-    started = true;
-  }
-}
+startBtn.onclick=()=>{
+  music.play();
+  startBtn.style.display="none";
+};
 
 function moveNo(){
-  playMusic();
   if(navigator.vibrate) navigator.vibrate(200);
-
   noCount++;
   localStorage.setItem("noCount",noCount);
 
-  noBtn.style.left = Math.random()*(window.innerWidth-120)+"px";
-  noBtn.style.top = Math.random()*(window.innerHeight-60)+"px";
+  noBtn.style.left=Math.random()*(window.innerWidth-120)+"px";
+  noBtn.style.top=Math.random()*(window.innerHeight-60)+"px";
 
-  counter.innerText = `Anonymous votes — Yes ❤️: ${yesCount} | No 💔: ${noCount}`;
+  counter.innerText=`Anonymous votes — Yes ❤️: ${yesCount} | No 💔: ${noCount}`;
 }
 
-noBtn.addEventListener("mouseenter", moveNo);
-noBtn.addEventListener("touchstart", moveNo);
-noBtn.addEventListener("click", moveNo);
+noBtn.addEventListener("mouseenter",moveNo);
+noBtn.addEventListener("touchstart",moveNo);
+noBtn.addEventListener("click",moveNo);
 
-yesBtn.addEventListener("click", ()=>{
-  playMusic();
+yesBtn.onclick=()=>{
   yesCount++;
   localStorage.setItem("yesCount",yesCount);
-
   document.body.innerHTML="<h1 style='color:white;'>YAYYY 💖😍</h1>";
-  setInterval(()=>{
-    const h=document.createElement("div");
-    h.className="heart";
-    h.innerHTML="💖";
-    h.style.left=Math.random()*window.innerWidth+"px";
-    h.style.bottom="0";
-    document.body.appendChild(h);
-    setTimeout(()=>h.remove(),3000);
-  },250);
-});
+};
 </script>
 
 </body>
