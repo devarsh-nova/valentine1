@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Valentine 💖</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body {
+  margin:0;
+  height:100vh;
+  background:linear-gradient(135deg,#ff4d6d,#845ec2);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  font-family:Arial,sans-serif;
+  overflow:hidden;
+}
+
+.card{
+  background:rgba(255,255,255,0.15);
+  backdrop-filter:blur(15px);
+  padding:30px;
+  border-radius:20px;
+  text-align:center;
+  color:white;
+}
+
+button{
+  padding:14px 30px;
+  font-size:18px;
+  border-radius:40px;
+  border:none;
+  cursor:pointer;
+  margin:10px;
+}
+
+#no{position:absolute;background:#6c757d;color:white;}
+#yes{background:#ffccd5;}
+
+.counter{margin-top:15px;font-size:14px;}
+
+.heart{
+  position:absolute;
+  font-size:22px;
+  animation:float 3s linear forwards;
+}
+
+@keyframes float{
+  from{transform:translateY(0);opacity:1;}
+  to{transform:translateY(-150px);opacity:0;}
+}
+</style>
+</head>
+
+<body>
+
+<audio id="music" src="music.mp3" loop></audio>
+
+<div class="card">
+<h1>Will you be my Valentine? 💘</h1>
+<button id="yes">Yes 😍</button>
+<button id="no">No 😒</button>
+<div class="counter" id="counter"></div>
+</div>
+
+<script>
+const noBtn = document.getElementById("no");
+const yesBtn = document.getElementById("yes");
+const counter = document.getElementById("counter");
+const music = document.getElementById("music");
+
+let started = false;
+let yesCount = localStorage.getItem("yesCount") || 0;
+let noCount = localStorage.getItem("noCount") || 0;
+
+counter.innerText = `Anonymous votes — Yes ❤️: ${yesCount} | No 💔: ${noCount}`;
+
+function playMusic(){
+  if(!started){
+    music.play().catch(()=>{});
+    started = true;
+  }
+}
+
+function moveNo(){
+  playMusic();
+  if(navigator.vibrate) navigator.vibrate(200);
+
+  noCount++;
+  localStorage.setItem("noCount",noCount);
+
+  noBtn.style.left = Math.random()*(window.innerWidth-120)+"px";
+  noBtn.style.top = Math.random()*(window.innerHeight-60)+"px";
+
+  counter.innerText = `Anonymous votes — Yes ❤️: ${yesCount} | No 💔: ${noCount}`;
+}
+
+noBtn.addEventListener("mouseenter", moveNo);
+noBtn.addEventListener("touchstart", moveNo);
+noBtn.addEventListener("click", moveNo);
+
+yesBtn.addEventListener("click", ()=>{
+  playMusic();
+  yesCount++;
+  localStorage.setItem("yesCount",yesCount);
+
+  document.body.innerHTML="<h1 style='color:white;'>YAYYY 💖😍</h1>";
+  setInterval(()=>{
+    const h=document.createElement("div");
+    h.className="heart";
+    h.innerHTML="💖";
+    h.style.left=Math.random()*window.innerWidth+"px";
+    h.style.bottom="0";
+    document.body.appendChild(h);
+    setTimeout(()=>h.remove(),3000);
+  },250);
+});
+</script>
+
+</body>
+</html>
